@@ -50,6 +50,9 @@
       <property name="cacheMode">
        <set>QGraphicsView::CacheNone</set>
       </property>
+      <property name="viewportUpdateMode">
+       <enum>QGraphicsView::FullViewportUpdate</enum>
+      </property>
      </widget>
     </item>
    </layout>
