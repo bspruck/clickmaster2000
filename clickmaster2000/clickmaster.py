@@ -283,6 +283,8 @@ class MainWindow(QtGui.QMainWindow):
     def load_pixmap(self, pixmap):
         self.reset()
         self._pixmap = pixmap
+        self._scene.setSceneRect(-pixmap.width() / 2, -pixmap.height() / 2,
+                                 pixmap.width() * 2, pixmap.height() * 2)
         QtGui.QGraphicsPixmapItem(pixmap, self._scene_pixmap)
         self._ui.view.fitInView(0, 0, pixmap.width(), pixmap.height(),
                                 mode=QtCore.Qt.KeepAspectRatio)
@@ -310,7 +312,11 @@ class MainWindow(QtGui.QMainWindow):
             new_size = min(self._gridSlider.maximum(), max(self._gridSlider.minimum(), new_size))
             self._gridSlider.setValue(new_size)
         else:
+            sp = self._ui.view.mapToScene(QtCore.QPoint(ev.x(), ev.y()))
+            cp = self._ui.view.mapToScene(QtCore.QPoint(self._ui.view.width() // 2,
+                                                        self._ui.view.height() // 2))
             self._ui.view.scale(delta, delta)
+            self._ui.view.centerOn(cp + (sp - cp) / 4)
             self.update_grid()
 
 
