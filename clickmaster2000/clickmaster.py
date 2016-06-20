@@ -300,23 +300,23 @@ class MainWindow(QtGui.QMainWindow):
 
 
     def on_wheel(self, ev):
-        delta = ev.delta() / 100.
-        if delta < 0:
-            delta = 1. / -delta
+        scale = ev.delta() / 100.
+        if scale < 0:
+            scale = 1. / -scale
         if ev.modifiers() & QtCore.Qt.ControlModifier:
-            new_size = self._size * delta
+            new_size = self._size * scale
             new_size = min(self._sizeSlider.maximum(), max(self._sizeSlider.minimum(), new_size))
             self._sizeSlider.setValue(new_size)
         elif ev.modifiers() & QtCore.Qt.ShiftModifier:
-            new_size = self._gridSize * delta
+            new_size = self._gridSize * scale
             new_size = min(self._gridSlider.maximum(), max(self._gridSlider.minimum(), new_size))
             self._gridSlider.setValue(new_size)
         else:
             sp = self._ui.view.mapToScene(QtCore.QPoint(ev.x(), ev.y()))
             cp = self._ui.view.mapToScene(QtCore.QPoint(self._ui.view.width() // 2,
                                                         self._ui.view.height() // 2))
-            self._ui.view.scale(delta, delta)
-            self._ui.view.centerOn(cp + (sp - cp) / 4)
+            self._ui.view.scale(scale, scale)
+            self._ui.view.centerOn(cp + (sp - cp) / 4 * math.copysign(1, ev.delta()))
             self.update_grid()
 
 
