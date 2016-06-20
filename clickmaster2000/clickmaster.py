@@ -9,41 +9,16 @@ import argparse
 import math
 from PyQt4 import QtCore, QtGui, uic
 
+if hasattr(sys, '_MEIPASS'):
+    RC_PATH = sys._MEIPASS
+else:
+    RC_PATH = os.path.dirname(__file__)
 
-HELP_MESSAGE = """ClickMaster 2000
-Click things, get counts!
-
-Click "Open" or Ctrl+O to open a new image.
-
-Click anywhere to add a new colored point.
-The current count is updated immediately.
-
-You cannot add a point over an existing one.
-Right-click on a point to delete it.
-
-Drag with the right mouse button to pan the view.
-Use the mouse wheel to zoom the view.
-
-Use the point slider to change all point sizes.
-Use the mouse wheel with Ctrl held to do the same.
-
-Use the "Grid" button or Ctrl+G to toggle the grid.
-Use the grid slider to change the grid size.
-Use the mouse wheel with Shift held to do the same.
-Empty cells are highlighted.
-
-Select the current color by using the dot next to the color.
-Cycle the current color by pressing 'x' on the keyboard.
-
-Click on the count to change the color.
-Existing points are recolored.
-
-The "Clear" button clears all the points.
-The reset button next to the colors only clears that color.
-
-Press Ctrl+C or 'c' on the keyboard to copy the
-current color count to the clipboard.
-"""
+APP_NAME = "ClickMaster2000"
+APP_DESC = "A tally counter for images"
+APP_HELP = open(os.path.join(RC_PATH, 'clickmaster.txt')).read()
+APP_URL = 'https://www.thregr.org/~wavexx/software/clickmaster2000/'
+APP_VER = '1.0'
 
 
 if sys.version_info.major < 3:
@@ -58,7 +33,7 @@ def load_ui(obj, file):
     cwd = os.getcwd()
     try:
         # chdir to the "ui" directory to preserve icon paths
-        os.chdir(os.path.dirname(__file__))
+        os.chdir(RC_PATH)
 
         # setup the form and attach it to obj
         form, _ = uic.loadUiType(file)
@@ -164,7 +139,7 @@ class QInvertedGraphicsRectItem(QtGui.QGraphicsRectItem):
 
 # main application
 class MainWindow(QtGui.QMainWindow):
-    def __init__(self, fast_load=False):
+    def __init__(self):
         super(MainWindow, self).__init__()
         self._ui = load_ui(self, "clickmaster.ui")
 
@@ -464,7 +439,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
     def on_help(self, ev=None):
-        QtGui.QMessageBox.information(self, "Help", HELP_MESSAGE)
+        QtGui.QMessageBox.information(self, "Help", APP_HELP)
 
 
 
@@ -474,8 +449,9 @@ class Application(QtGui.QApplication):
         super(Application, self).__init__(args)
 
         # command-line flags
-        ap = argparse.ArgumentParser()
-        ap.add_argument('file', nargs='?')
+        ap = argparse.ArgumentParser(description=APP_DESC)
+        ap.add_argument('--version', action='version', version='{} {}'.format(APP_NAME, APP_VER))
+        ap.add_argument('file', nargs='?', help='Image to load')
         args = ap.parse_args(map(str, args[1:]))
 
         # initialize
