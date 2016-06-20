@@ -390,7 +390,9 @@ class MainWindow(QtGui.QMainWindow):
         sp = self._ui.view.mapToScene(QtCore.QPoint(ev.x(), ev.y()))
         ex = self._find_point(sp.x(), sp.y())
         if ev.button() == 1:
-            if ex is not None:
+            if ex is not None or \
+               not (0 <= sp.x() < self._pixmap.width()) or \
+               not (0 <= sp.y() < self._pixmap.height()):
                 QtGui.QApplication.beep()
             else:
                 self._add_point(sp.x(), sp.y())
