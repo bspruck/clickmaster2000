@@ -16,7 +16,7 @@ else:
 
 APP_NAME = "ClickMaster2000"
 APP_DESC = "A tally counter for images"
-APP_HELP = open(os.path.join(RC_PATH, 'clickmaster.txt')).read()
+APP_HELP = open(os.path.join(RC_PATH, 'clickmaster.html')).read()
 APP_URL = 'https://www.thregr.org/~wavexx/software/clickmaster2000/'
 APP_VER = '1.0'
 
@@ -439,7 +439,11 @@ class MainWindow(QtGui.QMainWindow):
 
 
     def on_help(self, ev=None):
-        QtGui.QMessageBox.information(self, "Help", APP_HELP)
+        mb = QtGui.QMessageBox()
+        mb.setWindowTitle('Help')
+        mb.setTextFormat(QtCore.Qt.RichText)
+        mb.setText(APP_HELP.format(APP_VER=APP_VER, APP_URL=APP_URL))
+        mb.exec_()
 
 
 

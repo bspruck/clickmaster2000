@@ -3,7 +3,7 @@ a = Analysis(['clickmaster2000/clickmaster.py'],
              hiddenimports=[],
              hookspath=None,
              runtime_hooks=None)
-for path in ['clickmaster.txt', 'clickmaster.ui']:
+for path in ['clickmaster.html', 'clickmaster.ui']:
     a.datas.append((path, 'clickmaster2000/' + path, 'DATA'))
 pyz = PYZ(a.pure)
 exe = EXE(pyz,
