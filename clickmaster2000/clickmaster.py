@@ -336,6 +336,9 @@ class MainWindow(QtGui.QMainWindow):
         elif ev.text() == 'o':
             ev.accept()
             self.on_load()
+        elif ev.text() == 'g':
+            ev.accept()
+            self._ui.actionGrid.trigger()
         elif ev.text() == '?':
             ev.accept()
             self.on_help()
