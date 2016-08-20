@@ -179,7 +179,11 @@ class MainWindow(QtGui.QMainWindow):
         self._counts.append(count)
         self._ui.toolBar.insertWidget(None, count)
         self._ui.toolBar.insertSeparator(None)
-        count = CtrlWidget(1, QtGui.QColor("blue"))
+        count = CtrlWidget(1, QtGui.QColor("green"))
+        self._counts.append(count)
+        self._ui.toolBar.insertWidget(None, count)
+        self._points = [set() for _ in range(len(self._counts))]
+        count = CtrlWidget(2, QtGui.QColor("blue"))
         self._counts.append(count)
         self._ui.toolBar.insertWidget(None, count)
         self._points = [set() for _ in range(len(self._counts))]
@@ -199,6 +203,7 @@ class MainWindow(QtGui.QMainWindow):
         self._pixmap = None
         self._size = None
         self._gridSize = None
+        self._current = 1
         self.set_current(0)
         self.reset()
 
@@ -332,7 +337,7 @@ class MainWindow(QtGui.QMainWindow):
             self.set_current(int(ev.text()) - 1)
         elif ev.text() == 'x':
             ev.accept()
-            self.set_current((self._current + 1) % len(self._counts))
+            self.set_current(self._last)
         elif ev.text() == 'o':
             ev.accept()
             self.on_load()
@@ -383,6 +388,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
     def set_current(self, current):
+        self._last = self._current
         self._current = current
         for pset, count in enumerate(self._counts):
             count.setChecked(pset == self._current)
