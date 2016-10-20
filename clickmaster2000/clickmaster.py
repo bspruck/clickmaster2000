@@ -56,13 +56,13 @@ class CtrlWidget(QtGui.QWidget):
         self.idx = idx
         layout = QtGui.QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
-        self.setMaximumWidth(250)
         self._color = color
         self._check = QtGui.QRadioButton()
         self._check.setToolTip("Select color {}".format(idx + 1))
         self._check.clicked.connect(lambda x: self.setCurrent.emit(self.idx))
         self._ccnt = QtGui.QToolButton()
-        self._ccnt.setMinimumWidth(50)
+        self._ccnt.setMinimumWidth(100)
+        self._ccnt.setMaximumWidth(100)
         self._ccnt.setToolTip("Change color {}".format(idx + 1))
         self._ccnt.clicked.connect(self._on_ccnt)
         self._reset = QtGui.QToolButton()
@@ -88,15 +88,23 @@ class CtrlWidget(QtGui.QWidget):
 
     def reset(self):
         self._count = 0
+        self._total = 0
         self._update()
 
     def incr(self):
         self._count += 1
+        self._total += 1
         self._update()
 
     def decr(self):
         self._count -= 1
+        self._total -= 1
         self._update()
+
+    def set_total(self, total):
+        if self._total != total:
+            self._total = total
+            self._update()
 
     def count(self):
         return self._count
@@ -108,7 +116,8 @@ class CtrlWidget(QtGui.QWidget):
         self._check.setChecked(value)
 
     def _update(self):
-        self._ccnt.setText("{:4}".format(self._count))
+        pc = self._count * 100 // self._total if self._total > 0 else 0
+        self._ccnt.setText("{:4} {:3}%".format(self._count, pc))
         bg = self._color.name()
         if QtGui.qGray(self._color.rgb()) >= 127:
             fg = "#000000"
@@ -192,6 +201,11 @@ class MainWindow(QtGui.QMainWindow):
             count.countReset.connect(self.count_reset)
             count.colorChanged.connect(self.color_changed)
 
+        # total
+        self._ui.toolBar.insertSeparator(None)
+        self._total = QtGui.QLabel()
+        self._ui.toolBar.insertWidget(None, self._total)
+
         # scene
         self._scene = QtGui.QGraphicsScene(self)
         self._scene_pixmap = self._scene.createItemGroup([])
@@ -221,7 +235,15 @@ class MainWindow(QtGui.QMainWindow):
         for point in self._points[pset]:
             self._scene.removeItem(point)
         self._points[pset].clear()
+        self.update_total()
         self.update_grid()
+
+
+    def update_total(self):
+        total = sum([count.count() for count in self._counts])
+        for count in self._counts:
+            count.set_total(total)
+        self._total.setText(' Total: {:4} '.format(total))
 
 
     def color_changed(self, pset, color):
@@ -364,6 +386,7 @@ class MainWindow(QtGui.QMainWindow):
         point.setPen(QtGui.QPen(color))
         self._points[self._current].add(point)
         self._counts[self._current].incr()
+        self.update_total()
         self.update_grid()
 
 
@@ -371,6 +394,7 @@ class MainWindow(QtGui.QMainWindow):
         self._counts[pset].decr()
         self._points[pset].remove(item)
         self._scene.removeItem(item)
+        self.update_total()
         self.update_grid()
 
 
