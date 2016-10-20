@@ -192,6 +192,7 @@ class MainWindow(QtGui.QMainWindow):
         self._counts.append(count)
         self._ui.toolBar.insertWidget(None, count)
         self._points = [set() for _ in range(len(self._counts))]
+        self._ui.toolBar.insertSeparator(None)
         count = CtrlWidget(2, QtGui.QColor("blue"))
         self._counts.append(count)
         self._ui.toolBar.insertWidget(None, count)
