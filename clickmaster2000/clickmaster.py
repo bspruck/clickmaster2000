@@ -61,8 +61,6 @@ class CtrlWidget(QtGui.QWidget):
         self._check.setToolTip("Select color {}".format(idx + 1))
         self._check.clicked.connect(lambda x: self.setCurrent.emit(self.idx))
         self._ccnt = QtGui.QToolButton()
-        self._ccnt.setMinimumWidth(100)
-        self._ccnt.setMaximumWidth(100)
         self._ccnt.setToolTip("Change color {}".format(idx + 1))
         self._ccnt.clicked.connect(self._on_ccnt)
         self._reset = QtGui.QToolButton()
@@ -125,6 +123,7 @@ class CtrlWidget(QtGui.QWidget):
             fg = "#FFFFFF"
         self._ccnt.setStyleSheet('QToolButton {{ font-family: Consolas, monospace; font-weight: bold;'
                                  'background-color: {}; color: {}; }}'.format(bg, fg))
+        self._ccnt.adjustSize()
 
 
 class QInvertedGraphicsLineItem(QtGui.QGraphicsLineItem):
