@@ -19,6 +19,7 @@ APP_DESC = "A tally counter for images"
 APP_HELP = open(os.path.join(RC_PATH, 'clickmaster.html')).read()
 APP_URL = 'https://www.thregr.org/~wavexx/software/clickmaster2000/'
 APP_VER = '1.0'
+GRID_COLOR = QtGui.QColor(127, 127, 127)
 
 
 if sys.version_info.major < 3:
@@ -131,9 +132,10 @@ class QInvertedGraphicsLineItem(QtGui.QGraphicsLineItem):
         super(QInvertedGraphicsLineItem, self).__init__(*args, **kwargs)
 
     def paint(self, painter, *args, **kwargs):
-        painter.setCompositionMode(QtGui.QPainter.CompositionMode_Xor)
+        tmp = painter.compositionMode()
+        painter.setCompositionMode(QtGui.QPainter.RasterOp_SourceXorDestination)
         super(QInvertedGraphicsLineItem, self).paint(painter, *args, **kwargs)
-        painter.setCompositionMode(QtGui.QPainter.CompositionMode_Clear)
+        painter.setCompositionMode(tmp)
 
 
 class QInvertedGraphicsRectItem(QtGui.QGraphicsRectItem):
@@ -141,8 +143,10 @@ class QInvertedGraphicsRectItem(QtGui.QGraphicsRectItem):
         super(QInvertedGraphicsRectItem, self).__init__(*args, **kwargs)
 
     def paint(self, painter, *args, **kwargs):
-        painter.setCompositionMode(QtGui.QPainter.CompositionMode_Xor)
+        tmp = painter.compositionMode()
+        painter.setCompositionMode(QtGui.QPainter.RasterOp_SourceXorDestination)
         super(QInvertedGraphicsRectItem, self).paint(painter, *args, **kwargs)
+        painter.setCompositionMode(tmp)
 
 
 # main application
@@ -260,10 +264,10 @@ class MainWindow(QtGui.QMainWindow):
         border = scale * 10
         for x in range(1, width // step + 1):
             item = QInvertedGraphicsLineItem(x * step, 0, x * step, height, self._scene_grid)
-            item.setPen(QtGui.QColor(255, 255, 255, 127))
+            item.setPen(GRID_COLOR)
         for y in range(1, height // step + 1):
             item = QInvertedGraphicsLineItem(0, y * step, width, y * step, self._scene_grid)
-            item.setPen(QtGui.QColor(255, 255, 255, 127))
+            item.setPen(GRID_COLOR)
         for x in range(0, width // step + 1):
             for y in range(0, height // step + 1):
                 rect = QtCore.QRectF(x * step, y * step, step, step)
@@ -284,7 +288,7 @@ class MainWindow(QtGui.QMainWindow):
                     rect = QtCore.QRectF(rect.x() + border / 2, rect.y() + border / 2,
                                          rect.width() - border, rect.height() - border)
                     item = QInvertedGraphicsRectItem(rect, self._scene_grid)
-                    item.setPen(QtGui.QPen(QtGui.QColor(255, 255, 255, 25), border))
+                    item.setPen(QtGui.QPen(GRID_COLOR, border))
 
 
     def update_grid(self):
