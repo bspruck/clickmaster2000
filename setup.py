@@ -30,6 +30,7 @@ setup(name='clickmaster2000', version='1.0',
                    'Topic :: Scientific/Engineering',
                    'Topic :: Utilities'],
 
-      entry_points={'gui_scripts': ['clickmaster2000 = clickmaster2000:main']},
+      entry_points={'gui_scripts': ['clickmaster2000=clickmaster2000:main']},
       packages=find_packages(),
-      setup_requires=['setuptools', 'setuptools-git'])
+      include_package_data=True,
+      setup_requires=['setuptools'])
