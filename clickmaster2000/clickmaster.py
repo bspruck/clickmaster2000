@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # clickmaster: click things, get counts!
-# Copyright(c) 2016 by wave++ "Yuri D'Elia" <wavexx@thregr.org>
+# Copyright(c) 2016-2017 by wave++ "Yuri D'Elia" <wavexx@thregr.org>
 from __future__ import print_function, division, generators, unicode_literals, absolute_import
 
 import io, os, sys
