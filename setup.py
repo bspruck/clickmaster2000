@@ -9,7 +9,7 @@ long_description = readme = open('README.rst').read()
 
 # the actual setup
 setup(name='clickmaster2000', version='1.0',
-      description='Click things, get counts!',
+      description='Tally counter for images',
 
       author="Yuri D'Elia",
       author_email="wavexx@thregr.org",
