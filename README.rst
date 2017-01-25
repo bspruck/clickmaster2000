@@ -7,9 +7,10 @@ A tally counter for images
 
 .. contents::
 
-ClickMaster2000 is a simple tally counter for images. You can load images
-containing objects that need to be counted, click on each one of them, and then
-read the total without having to keep mental record.
+ClickMaster2000 is a simple tally counter for images: a program to count
+objects inside an image. You can load images containing objects that need to be
+counted, click on each one of them, and then read the total without having to
+keep mental record.
 
 ClickMaster2000 is geared for batch, precise counting on dense images where
 automated recognition is not easily possible. ClickMaster2000 was originally
