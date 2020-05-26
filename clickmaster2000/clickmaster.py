@@ -1,13 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # clickmaster: click things, get counts!
-# Copyright(c) 2016-2017 by wave++ "Yuri D'Elia" <wavexx@thregr.org>
-from __future__ import print_function, division, generators, unicode_literals, absolute_import
-
+# Copyright(c) 2016-2020 by wave++ "Yuri D'Elia" <wavexx@thregr.org>
 import io, os, sys
 import argparse
 import math
-from PyQt4 import QtCore, QtGui, uic
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 
 if hasattr(sys, '_MEIPASS'):
     RC_PATH = sys._MEIPASS
@@ -18,16 +16,8 @@ APP_NAME = "ClickMaster2000"
 APP_DESC = "A tally counter for images"
 APP_HELP = open(os.path.join(RC_PATH, 'clickmaster.html')).read()
 APP_URL = 'https://www.thregr.org/~wavexx/software/clickmaster2000/'
-APP_VER = '1.0'
+APP_VER = '1.1'
 GRID_COLOR = QtGui.QColor(127, 127, 127)
-
-
-if sys.version_info.major < 3:
-    # Python 2.7 shim
-    str = unicode
-else:
-    basestring = str
-    file = io.FileIO
 
 
 def load_ui(obj, file):
@@ -47,25 +37,25 @@ def load_ui(obj, file):
 
 
 
-class CtrlWidget(QtGui.QWidget):
+class CtrlWidget(QtWidgets.QWidget):
     colorChanged = QtCore.pyqtSignal(int, QtGui.QColor)
     countReset = QtCore.pyqtSignal(int)
     setCurrent = QtCore.pyqtSignal(int)
 
     def __init__(self, idx, color):
-        super(QtGui.QWidget, self).__init__()
+        super(QtWidgets.QWidget, self).__init__()
         self.idx = idx
-        layout = QtGui.QHBoxLayout()
+        layout = QtWidgets.QHBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
         self._color = color
-        self._check = QtGui.QRadioButton()
+        self._check = QtWidgets.QRadioButton()
         self._check.setToolTip("Select color {}".format(idx + 1))
         self._check.clicked.connect(lambda x: self.setCurrent.emit(self.idx))
-        self._ccnt = QtGui.QToolButton()
+        self._ccnt = QtWidgets.QToolButton()
         self._ccnt.setToolTip("Change color {}".format(idx + 1))
         self._ccnt.clicked.connect(self._on_ccnt)
-        self._reset = QtGui.QToolButton()
-        self._reset.setIcon(self.style().standardIcon(QtGui.QStyle.SP_DialogCancelButton))
+        self._reset = QtWidgets.QToolButton()
+        self._reset.setIcon(self.style().standardIcon(QtWidgets.QStyle.SP_DialogCancelButton))
         self._reset.setToolTip("Clear color {}".format(idx + 1))
         self._reset.clicked.connect(self._on_reset)
         layout.addWidget(self._check)
@@ -75,7 +65,7 @@ class CtrlWidget(QtGui.QWidget):
         self.reset()
 
     def _on_ccnt(self, ev):
-        color = QtGui.QColorDialog.getColor(self._color, self)
+        color = QtWidgets.QColorDialog.getColor(self._color, self)
         if color.isValid():
             self._color = color
             self._update()
@@ -123,11 +113,11 @@ class CtrlWidget(QtGui.QWidget):
         else:
             fg = "#FFFFFF"
         self._ccnt.setStyleSheet('QToolButton {{ font-family: Consolas, monospace; font-weight: bold;'
-                                 'background-color: {}; color: {}; }}'.format(bg, fg))
+                                 'background-color: {}; border: none; color: {}; }}'.format(bg, fg))
         self._ccnt.adjustSize()
 
 
-class QInvertedGraphicsLineItem(QtGui.QGraphicsLineItem):
+class QInvertedGraphicsLineItem(QtWidgets.QGraphicsLineItem):
     def __init__(self, *args, **kwargs):
         super(QInvertedGraphicsLineItem, self).__init__(*args, **kwargs)
 
@@ -138,7 +128,7 @@ class QInvertedGraphicsLineItem(QtGui.QGraphicsLineItem):
         painter.setCompositionMode(tmp)
 
 
-class QInvertedGraphicsRectItem(QtGui.QGraphicsRectItem):
+class QInvertedGraphicsRectItem(QtWidgets.QGraphicsRectItem):
     def __init__(self, *args, **kwargs):
         super(QInvertedGraphicsRectItem, self).__init__(*args, **kwargs)
 
@@ -150,7 +140,7 @@ class QInvertedGraphicsRectItem(QtGui.QGraphicsRectItem):
 
 
 # main application
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtWidgets.QMainWindow):
     def __init__(self):
         super(MainWindow, self).__init__()
         self._ui = load_ui(self, "clickmaster.ui")
@@ -167,7 +157,7 @@ class MainWindow(QtGui.QMainWindow):
         self._ui.view.keyPressEvent = self.on_key
 
         # grid size
-        self._gridSlider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self._gridSlider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self._gridSlider.setMaximumWidth(200)
         self._gridSlider.setToolTip('Grid size')
         self._gridSlider.valueChanged.connect(self.on_grid_size)
@@ -175,7 +165,7 @@ class MainWindow(QtGui.QMainWindow):
 
         # point sizes
         self._ui.toolBar.insertSeparator(None)
-        self._sizeSlider = QtGui.QSlider(QtCore.Qt.Horizontal)
+        self._sizeSlider = QtWidgets.QSlider(QtCore.Qt.Horizontal)
         self._sizeSlider.setRange(10, 100)
         self._sizeSlider.setMaximumWidth(200)
         self._sizeSlider.setToolTip('Point size')
@@ -207,11 +197,11 @@ class MainWindow(QtGui.QMainWindow):
 
         # total
         self._ui.toolBar.insertSeparator(None)
-        self._total = QtGui.QLabel()
+        self._total = QtWidgets.QLabel()
         self._ui.toolBar.insertWidget(None, self._total)
 
         # scene
-        self._scene = QtGui.QGraphicsScene(self)
+        self._scene = QtWidgets.QGraphicsScene(self)
         self._scene_pixmap = self._scene.createItemGroup([])
         self._scene_grid = self._scene.createItemGroup([])
         self._scene_points = self._scene.createItemGroup([])
@@ -316,7 +306,7 @@ class MainWindow(QtGui.QMainWindow):
         self._pixmap = pixmap
         self._scene.setSceneRect(-pixmap.width() / 2, -pixmap.height() / 2,
                                  pixmap.width() * 2, pixmap.height() * 2)
-        QtGui.QGraphicsPixmapItem(pixmap, self._scene_pixmap)
+        QtWidgets.QGraphicsPixmapItem(pixmap, self._scene_pixmap)
         self._ui.view.fitInView(0, 0, pixmap.width(), pixmap.height(),
                                 mode=QtCore.Qt.KeepAspectRatio)
         initial = self._gridSize is None
@@ -331,7 +321,8 @@ class MainWindow(QtGui.QMainWindow):
 
 
     def on_wheel(self, ev):
-        scale = ev.delta() / 100.
+        delta = ev.angleDelta().y()
+        scale = delta / 100.
         if scale < 0:
             scale = 1. / -scale
         if ev.modifiers() & QtCore.Qt.ControlModifier:
@@ -347,7 +338,7 @@ class MainWindow(QtGui.QMainWindow):
             cp = self._ui.view.mapToScene(QtCore.QPoint(self._ui.view.width() // 2,
                                                         self._ui.view.height() // 2))
             self._ui.view.scale(scale, scale)
-            self._ui.view.centerOn(cp + (sp - cp) / 4 * math.copysign(1, ev.delta()))
+            self._ui.view.centerOn(cp + (sp - cp) / 4 * math.copysign(1, delta))
             self.update_grid()
 
 
@@ -375,19 +366,19 @@ class MainWindow(QtGui.QMainWindow):
             self.on_help()
         elif ev.key() == QtCore.Qt.Key_C:
             ev.accept()
-            clipboard = QtGui.QApplication.instance().clipboard()
+            clipboard = QtWidgets.QApplication.instance().clipboard()
             clipboard.setText(str(self._counts[self._current].count()))
 
 
     def _add_point(self, sx, sy):
-        point = QtGui.QGraphicsEllipseItem(-self._size / 2, -self._size / 2,
-                                           self._size, self._size,
-                                           scene=self._scene)
+        point = QtWidgets.QGraphicsEllipseItem(-self._size / 2, -self._size / 2,
+                                               self._size, self._size)
         point.setPos(sx, sy)
         color = QtGui.QColor(self._counts[self._current].color())
         color.setAlphaF(0.7)
         point.setBrush(QtGui.QBrush(color))
         point.setPen(QtGui.QPen(color))
+        self._scene.addItem(point)
         self._points[self._current].add(point)
         self._counts[self._current].incr()
         self.update_total()
@@ -430,7 +421,7 @@ class MainWindow(QtGui.QMainWindow):
             if ex is not None or \
                not (0 <= sp.x() < self._pixmap.width()) or \
                not (0 <= sp.y() < self._pixmap.height()):
-                QtGui.QApplication.beep()
+                QtCore.QApplication.beep()
             else:
                 self._add_point(sp.x(), sp.y())
         elif ev.button() == 2 and ex is not None:
@@ -469,7 +460,7 @@ class MainWindow(QtGui.QMainWindow):
         if not pixmap.isNull():
             self.load_pixmap(pixmap)
         else:
-            QtGui.QMessageBox.critical(self, "Load error", "Cannot open: " + path)
+            QtWidgets.QMessageBox.critical(self, "Load error", "Cannot open: " + path)
 
 
     def on_clear(self, ev):
@@ -477,14 +468,14 @@ class MainWindow(QtGui.QMainWindow):
 
 
     def on_load(self, ev=None):
-        path = QtGui.QFileDialog.getOpenFileName(
+        path, _ = QtWidgets.QFileDialog.getOpenFileName(
             self, "Load Image", "", "Images (*.bmp *.png *.gif *.jpg *.jpeg *.tif *.tiff)")
         if path:
             self.load(str(path))
 
 
     def on_help(self, ev=None):
-        mb = QtGui.QMessageBox()
+        mb = QtWidgets.QMessageBox()
         mb.setWindowTitle('Help')
         mb.setTextFormat(QtCore.Qt.RichText)
         mb.setText(APP_HELP.format(APP_VER=APP_VER, APP_URL=APP_URL))
@@ -493,7 +484,7 @@ class MainWindow(QtGui.QMainWindow):
 
 
 # main application
-class Application(QtGui.QApplication):
+class Application(QtWidgets.QApplication):
     def __init__(self, args):
         super(Application, self).__init__(args)
 

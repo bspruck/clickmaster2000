@@ -22,10 +22,10 @@ Installation
 
 Windows: simply copy the executable into a suitable location and run.
 
-Source/Linux: first install the required dependencies (Python, PyQt4 and
-setuptools). On a Debian/Ubuntu system run::
+Source/Linux: first install the required dependencies (Python3, PyQt5
+and setuptools). On a Debian/Ubuntu system run::
 
-  sudo apt-get install python-qt4 python-setuptools
+  sudo apt-get install python3-pyqt5 python3-setuptools
 
 Then proceed with regular installation::
 
