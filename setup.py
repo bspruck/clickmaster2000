@@ -3,9 +3,9 @@ from setuptools import setup, find_packages
 
 # long description with latest release notes
 long_description = readme = open('README.rst').read()
-#news = open('NEWS.rst').read()
-#long_description = (readme + "\n\nLatest release notes\n====================\n"
-#                    + '\n'.join(news.split('\n\n\n', 1)[0].splitlines()[2:]))
+news = open('NEWS.rst').read()
+long_description = (readme + "\n\nLatest release notes\n====================\n"
+                    + '\n'.join(news.split('\n\n\n', 1)[0].splitlines()[2:]))
 
 # the actual setup
 setup(name='clickmaster2000', version='1.1',
@@ -30,6 +30,7 @@ setup(name='clickmaster2000', version='1.1',
                    'Topic :: Utilities'],
 
       entry_points={'gui_scripts': ['clickmaster2000=clickmaster2000:main']},
+      data_files=[('share/doc/clickmaster2000', ['README.rst', 'NEWS.rst'])],
       packages=find_packages(),
       include_package_data=True,
       setup_requires=['setuptools'])
