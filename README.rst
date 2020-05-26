@@ -129,8 +129,8 @@ Authors and Copyright
 "clickmaster2000" can be found at https://www.thregr.org/~wavexx/software/clickmaster2000/
 
 | "clickmaster2000" is distributed under GNU GPLv3+, WITHOUT ANY WARRANTY.
-| Copyright(c) 2016-2017: wave++ "Yuri D'Elia" <wavexx@thregr.org>.
-| Copyright(c) 2016-2017: EURAC, Institute of Genetic Medicine
+| Copyright(c) 2016-2020: wave++ "Yuri D'Elia" <wavexx@thregr.org>.
+| Copyright(c) 2016-2020: EURAC, Institute of Genetic Medicine
 
 clickmaster2000's GIT repository is publicly accessible at:
 
