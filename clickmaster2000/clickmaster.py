@@ -472,31 +472,39 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def savecsv(self, path):
         print("Save %s" %path)
-        with open(path, mode='w') as csv_file:
-            csv_writer = csv.writer(csv_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        try:
+            with open(path, mode='w') as csv_file:
+                csv_writer = csv.writer(csv_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
-            for ind,pset in enumerate(self._points):
-                for point in pset:
-                    csv_writer.writerow([ind,point.x(),point.y()])
+                for ind,pset in enumerate(self._points):
+                    for point in pset:
+                        csv_writer.writerow([ind,point.x(),point.y()])
+        except:
+            # avoid a crash if file cannot be written
+            None
 
     def loadcsv(self, path):
         print("Load %s" % path)
-        with open(path, mode='r') as csv_file:
-            csv_reader = csv.reader(csv_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            for row in csv_reader:
-                ind=int(row[0])
-                px=float(row[1])
-                py=float(row[2])
-                point = QtWidgets.QGraphicsEllipseItem(-self._size / 2, -self._size / 2,
-                                                self._size, self._size)
-                point.setPos(px,py)
-                color = QtGui.QColor(self._counts[ind].color())
-                color.setAlphaF(0.7)
-                point.setBrush(QtGui.QBrush(color))
-                point.setPen(QtGui.QPen(color))
-                self._scene.addItem(point)
-                self._points[ind].add(point)
-                self._counts[ind].incr()
+        try:
+            with open(path, mode='r') as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                for row in csv_reader:
+                    ind=int(row[0])
+                    px=float(row[1])
+                    py=float(row[2])
+                    point = QtWidgets.QGraphicsEllipseItem(-self._size / 2, -self._size / 2,
+                                                    self._size, self._size)
+                    point.setPos(px,py)
+                    color = QtGui.QColor(self._counts[ind].color())
+                    color.setAlphaF(0.7)
+                    point.setBrush(QtGui.QBrush(color))
+                    point.setPen(QtGui.QPen(color))
+                    self._scene.addItem(point)
+                    self._points[ind].add(point)
+                    self._counts[ind].incr()
+        except:
+            # avoid a crash if file is not existing or acnnot be read
+            None
         self.update_total()
         self.update_grid()
 
