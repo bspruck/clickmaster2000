@@ -126,7 +126,7 @@ images in succession doesn't require many adjustments.
 Authors and Copyright
 ---------------------
 
-"clickmaster2000" can be found at https://www.thregr.org/~wavexx/software/clickmaster2000/
+"clickmaster2000" can be found at https://www.thregr.org/wavexx/software/clickmaster2000/
 
 | "clickmaster2000" is distributed under GNU GPLv3+, WITHOUT ANY WARRANTY.
 | Copyright(c) 2016-2020: wave++ "Yuri D'Elia" <wavexx@thregr.org>.
